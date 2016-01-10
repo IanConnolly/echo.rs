@@ -1,7 +1,7 @@
 use std::env;
 
 fn main() {
-    let args = env::args().collect::<Vec<_>>();
+    let args = env::args().collect::<Vec<String>>();
 
     if args.len() < 1 {
         return;
@@ -9,17 +9,18 @@ fn main() {
 
     let nflag = args[1] == "-n";
 
-    let start = if nflag {
+    let skip = if nflag {
         2
     } else {
         1
     };
 
-    if start > args.len() {
-        return;
-    }
-
-    print!("{}", args[start]);
+    let output = args.iter()
+                     .skip(skip)
+                     .map(ToOwned::to_owned)
+                     .collect::<Vec<String>>()
+                     .join(" ");
+    print!("{}", output);
 
     if !nflag {
         print!("\n");
